@@ -50,6 +50,16 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var cfg = {
+  MARK: {
+    width: 50, // ширина обычных маркеров на карте
+    height: 70, // высота
+    mainActiveWidth: 65, // ширина главного маркера в активном состоянии
+    mainActiveHeight: 87, // высота
+    mainInactiveWidth: 65, // ширина главного маркера в НЕ активном состоянии
+    mainInactiveHeight: 65 // высота ..
+  },
+
 // Находим map, и удаляем у него класс
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -134,3 +144,149 @@ function renderPins(pinsData) {
 }
 
 renderPins(generateMocks(PIN_AMOUNT));
+
+// 11. Личный проект: доверяй, но проверяй (часть 1)
+
+var map =  document.querySelector('.map');
+var adForm = document.querySelector('.ad-form');
+var adFormFieldsets =  document.querySelectorAll('.ad-form fieldset');
+var filterForm =  document.querySelector('.map__filters');
+var filterFormSelect =  document.querySelectorAll('.map__filters select');
+var filterFormFieldsets = document.querySelectorAll('.map__filters fieldset');
+
+//
+setDisabled: function (elements) {
+   for (var i = 0; i < elements.length; i++) {
+     elements[i].setAttribute('disabled', '');
+   }
+ }
+
+ setEnabled: function (elements) {
+   for (var i = 0; i < elements.length; i++) {
+     elements[i].removeAttribute('disabled');
+   }
+ }
+
+
+// функция установки неактивного состояния страницы
+
+var setInactive = function () {
+
+// Блок с картой .map содержит класс map--faded;
+map.classList.add('map--faded');
+
+// Форма заполнения информации об объявлении .ad-form содержит класс ad-form--disabled;
+adForf.classList.add('ad-form--disabled');
+
+// Все <input> и <select> формы .ad-form заблокированы с помощью атрибута disabled, добавленного на них или на их  родительские блоки fieldset
+setDisabled(adFormFieldsets);
+// Форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
+setDisabled(filterFormSelect);
+setDisabled(filterFormFieldsets);
+
+}
+
+// функция установки активного состояния страницы
+
+var setActive = function() {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    setEnabled(adFormFieldsets);
+    setEnabled(filterFormSelect);
+    setEnabled(filterFormFieldsets);
+}
+
+// активация страницы по клику мыши. Скопировал код из интернета...
+var mouse = {
+
+  buttons: {LEFT: 0, MIDDLE: 1, RIGHT: 2, UNDEFINED: 99},
+
+  getPressButton: function (evt) {
+    if (typeof evt === 'object') {
+      var btnCode = evt.button;
+
+      switch (btnCode) {
+        case 0:
+          return this.buttons.LEFT;
+        case 1:
+          return this.buttons.MIDDLE;
+        case 2:
+          return this.buttons.RIGHT;
+      }
+    }
+    return this.buttons.UNDEFINED;
+  }
+};
+
+// адрес id
+
+var elementAddress = document.querySelector('#address');
+
+// вычисление координат. Скопировал и подогнал код из интернета...
+
+var getCoord = function (marker, markerState) {
+   var width = 0;
+   var height = 0;
+
+   switch (markerState) {
+     case 'main-active':
+       height = cfg.MARK.mainActiveHeight;
+       width = cfg.MARK.mainActiveWidth;
+       break;
+     case 'main-inactive':
+       height = cfg.MARK.mainInactiveHeight;
+       width = cfg.MARK.mainInactiveWidth;
+       break;
+     default:
+       width = cfg.MARK.width;
+       height = cfg.MARK.height;
+       break;
+   }
+
+   var x = Math.round(func.parseInt(marker.style.left) + width / 2);
+   var y = Math.round(func.parseInt(marker.style.top) + height);
+
+   return {
+     x: x,
+     y: y
+   };
+
+ }
+
+
+// заполнение адреса
+
+var setAddres = function() {
+
+  var coord = getCoord(marker, markerState);
+  elementAddress.value = coord.x + ',' + coord.y;
+}
+
+
+// По ТЗ должно быть сначала не активное состояние страницы
+
+setInactive();
+
+// ТЗ: Поле адреса должно быть заполнено всегда, в том числе сразу после открытия страницы (в неактивном состоянии)
+
+var mapPinMain = document.querySelector('.map__pin--main');
+address.setAddress(mapPinMain, 'main-inactive');
+
+// перевод страницы Кексобукинга в активный режим при нажатии левой клавиши мыши на главный маркер
+
+mapPinMain.addEventListener('mousedown', function(evt) {
+  if (mouse.getPressButton(evt) === mouse.buttons.LEFT) {
+    setActive();
+  }
+});
+
+
+// нажатие на Enter тоже переводит в активный режим
+
+mapPinMain.addEventListener('keydown', function(evt) {
+  if (evt.key === 'Enter') {
+    setActive();
+  }
+});
+
+// дальше - валидация... чето не понимаю что делатьи как ))))
