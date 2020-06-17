@@ -251,4 +251,5 @@ adFormGuests.addEventListener('input', function () {
   checkRoomsAndGuests();
 });
 setInActiveState();
+
 // setActiveState();
