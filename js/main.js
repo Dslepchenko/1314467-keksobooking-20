@@ -51,7 +51,7 @@ var PHOTOS = [
 ];
 
 var PIN_TIP_HEIGHT = 22;
-
+debugger
 // Находим map, и удаляем у него класс
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -250,6 +250,7 @@ adFormRoomsNumber.addEventListener('input', function () {
 adFormGuests.addEventListener('input', function () {
   checkRoomsAndGuests();
 });
+
 setInActiveState();
 
 // setActiveState();
