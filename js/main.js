@@ -50,6 +50,25 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var OFFER_TYPES = {
+  'bungalo': {
+    translate: 'Бунгало',
+    minPrice: 0
+  },
+  'flat': {
+    translate: 'Квартира',
+    minPrice: 1000
+  },
+  'house': {
+    translate: 'Дом',
+    minPrice: 5000
+  },
+  'palace': {
+    translate: 'Дворец',
+    minPrice: 10000
+  }
+};
+
 var PIN_TIP_HEIGHT = 22;
 
 // Находим map, и удаляем у него класс
@@ -169,6 +188,10 @@ var setInActiveState = function () {
   deActivationPage(filterFormSelect);
   deActivationPage(filterFormFieldsets);
   deActivationPage(mapFilters);
+  titleInputAdForm.removeEventListener('change', onTitleChanged);
+  typeHousingSelectAdForm.removeEventListener('change', onTypeHousingChanged);
+  capacitySelectAdForm.addEventListener('change', onRoomOrCapacityChanged);
+  roomSelectAdForm.removeEventListener('change', onRoomOrCapacityChanged);
 };
 
 
@@ -182,7 +205,12 @@ var setActiveState = function () {
   activationPage(adForm);
   activationPage(mapFilters);
   genetarePins();
+  titleInputAdForm.addEventListener('change', onTitleChanged);
+  typeHousingSelectAdForm.addEventListener('change', onTypeHousingChanged);
+  // getGuestCapacity();
   adFormAddressInput.value = getAddressCoordinate();
+  capacitySelectAdForm.addEventListener('change', onRoomOrCapacityChanged);
+  roomSelectAdForm.addEventListener('change', onRoomOrCapacityChanged)
 };
 
 mapPinMain.addEventListener('click', function () {
@@ -205,52 +233,89 @@ var getAddressCoordinate = function () {
   return location;
 };
 
-var adFormRoomsNumber = adForm.querySelector('#room_number');
-var adFormGuests = adForm.querySelector('#capacity');
-
-var roomsAmount = {
-  '1': {
-    guestsAmout: ['1'],
-    customMessage: 'Для 1 комнаты возможен вариант: 1 гость',
-  },
-  '2': {
-    guestsAmout: ['1', '2'],
-    customMessage: 'Для 2 комнат возможны варианты: 1 гость, 2 гостя',
-  },
-  '3': {
-    guestsAmout: ['1', '2', '3'],
-    customMessage: 'Для 3 комнат возможны варианты: 1 гость, 2 гостя, 3 гостя',
-  },
-  '100': {
-    guestsAmout: ['0'],
-    customMessage: 'Для 100 комнат возможен варианты: не для гостей',
-  },
-};
-
-// Функция для проверки валидации значении комнат и гостей
-var checkRoomsAndGuests = function () {
-  var roomsValue = adFormRoomsNumber.value;
-  var guestsValue = adFormGuests.value;
-  var currentRooms = roomsAmount[roomsValue];
-  var customMessage = currentRooms['customMessage'];
-
-  for (var i = 0; i < currentRooms['guestsAmout'].length; i++) {
-    if (guestsValue === currentRooms['guestsAmout'][i]) {
-      customMessage = '';
-    }
+// код не работает! сидел 4 часа, ничего не придумал
+// debugger
+// var roomNubmers = document.getElementById('#room_number');
+// var guestsCapacity = document.querySelector('#capacity');
+//
+// var getGuestCapacity = function () {
+//     for (var i = 0; i <= roomNubmers.length; i++) {
+//     if (roomNubmers.option.value === '1') {
+//
+//       guestsCapacity[0].setAttribute('disabled', true);
+//       guestsCapacity[1].setAttribute('disabled', true);
+//       guestsCapacity[2].removeAttribute('disabled','');
+//       guestsCapacity[3].setAttribute('disabled', true);
+//     }
+//     else if (roomNubmers[i].value === '2') {
+//
+//       guestsCapacity[0].setAttribute('disabled', true);
+//       guestsCapacity[1].removeAttribute('disabled','');
+//       guestsCapacity[2].setAttribute('disabled', true);
+//       guestsCapacity[3].setAttribute('disabled', true);
+//     }
+//     else if (roomNubmers[i].value === '3') {
+//
+//       guestsCapacity[0].removeAttribute('disabled', true);
+//       guestsCapacity[1].setAttribute('disabled', true);;
+//       guestsCapacity[2].setAttribute('disabled', true);
+//       guestsCapacity[3].setAttribute('disabled', true);
+//
+// }
+//   }
+// };
+var titleInputAdForm = adForm.querySelector('input[name="title"]');
+// Функция для валидации заголовка
+function onTitleChanged() {
+  if (titleInputAdForm.validity.tooShort) {
+    titleInputAdForm.setCustomValidity('Заголовок должен состоять минимум из 30-ти символов');
+  } else if (titleInputAdForm.validity.tooLong) {
+    titleInputAdForm.setCustomValidity('Заголовок не должен превышать 100 символов');
+  } else if (titleInputAdForm.validity.valueMissing) {
+    titleInputAdForm.setCustomValidity('Обязательное поле');
+  } else {
+    titleInputAdForm.setCustomValidity('');
   }
+}
+// Функция для генерации минимальной цены за ночь относительно выбранного Типа жилья
+var priceInputAdForm = adForm.querySelector('input[name="price"]');
+function onTypeHousingChanged() {
+  var type = OFFER_TYPES[typeHousingSelectAdForm.value];
+  priceInputAdForm.placeholder = type.minPrice;
+  priceInputAdForm.min = type.minPrice;
+}
 
-  adFormGuests.setCustomValidity(customMessage);
+var typeHousingSelectAdForm = adForm.querySelector('select[name="type"]');
+
+
+var roomSelectAdForm = adForm.querySelector('select[name="rooms"]');
+
+// Функция для валидации комнат
+
+var countOfPlacesInRoom = {
+  1: {
+    capacity: ['1'],
+    error: 'В 1 комнате может находиться 1 гость. Измените выбранные параметры'
+  },
+  2: {
+    capacity: ['1', '2'],
+    error: 'В 2 комнатах могут находиться 1 или 2 гостя. Измените выбранные параметры'
+  },
+  3: {
+    capacity: ['1', '2', '3'],
+    error: 'В 3 комнатах могут находиться от 1 до 3 гостей. Измените выбранные параметры'
+  },
+  100: {
+    capacity: ['0'],
+    error: 'Упс! 100 комнат предназначены не для размещения гостей. Измените выбранные параметры'
+  }
 };
 
-adFormRoomsNumber.addEventListener('input', function () {
-  checkRoomsAndGuests();
-});
-
-adFormGuests.addEventListener('input', function () {
-  checkRoomsAndGuests();
-});
-
+function onRoomOrCapacityChanged() {
+  var room = countOfPlacesInRoom[roomSelectAdForm.value];
+  var errorMessage = room.capacity.includes(capacitySelectAdForm.value) ? '' : room.error;
+  roomSelectAdForm.setCustomValidity(errorMessage);
+}
 setInActiveState();
 
 // setActiveState();
