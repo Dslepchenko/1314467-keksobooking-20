@@ -210,7 +210,7 @@ var setActiveState = function () {
   // getGuestCapacity();
   adFormAddressInput.value = getAddressCoordinate();
   capacitySelectAdForm.addEventListener('change', onRoomOrCapacityChanged);
-  roomSelectAdForm.addEventListener('change', onRoomOrCapacityChanged)
+  roomSelectAdForm.addEventListener('change', onRoomOrCapacityChanged);
 };
 
 mapPinMain.addEventListener('click', function () {
@@ -291,7 +291,7 @@ var typeHousingSelectAdForm = adForm.querySelector('select[name="type"]');
 var roomSelectAdForm = adForm.querySelector('select[name="rooms"]');
 
 // Функция для валидации комнат
-
+var capacitySelectAdForm = adForm.querySelector('select[name="capacity"]');
 var countOfPlacesInRoom = {
   1: {
     capacity: ['1'],
