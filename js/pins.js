@@ -31,7 +31,6 @@
 
 
   var successHandler = function (arrData) {
-    console.log(arrData);
     advertArr = arrData;
     renderPins(advertArr);
   };
