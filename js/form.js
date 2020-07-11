@@ -58,8 +58,6 @@
     getTimeIn.removeEventListener('click', getTimeInAndTimeOut);
     titleInputAdForm.removeEventListener('change', onTitleChanged);
     typeHousingSelectAdForm.removeEventListener('change', onTypeHousingChanged);
-
-
   };
 
 
@@ -72,12 +70,13 @@
     activationPage(filterFormFieldsets);
     activationPage(adForm);
     activationPage(mapFilters);
-    window.pins.generatePins();
+    // window.pins.generatePins();
     roomNumbers.addEventListener('click', getGuestCapacity);
     getTimeIn.addEventListener('click', getTimeInAndTimeOut);
     titleInputAdForm.addEventListener('change', onTitleChanged);
     typeHousingSelectAdForm.addEventListener('change', onTypeHousingChanged);
     adFormAddressInput.value = getAddressCoordinate();
+    window.backend.load(window.pins.successHandler, window.backend.errorHandler);
   };
 
   mapPinMain.addEventListener('click', function () {
@@ -187,5 +186,4 @@
     setActiveState: setActiveState,
     setInActiveState: setInActiveState,
   };
-
 }());

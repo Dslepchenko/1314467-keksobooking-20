@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 
-  var PIN_AMOUNT = 8;
+  var advertArr = [];
   // Находим map, и удаляем у него класс
   var map = document.querySelector('.map');
   map.classList.remove('map--faded');
@@ -29,12 +29,22 @@
     mapPins.appendChild(fragment);
   }
 
-  var generatePins = function () {
-    renderPins(window.data.generateMocks(PIN_AMOUNT));
+
+  var successHandler = function (arrData) {
+    console.log(arrData);
+    advertArr = arrData;
+    renderPins(advertArr);
   };
 
+
+  // window.backend.load(successHandler, window.backend.errorHandler);
+  // var generatePins = function () {
+  //   renderPins(advertArr);
+  // };
+
+
   window.pins = {
-    generatePins: generatePins
+    successHandler: successHandler
   };
 
 }());
