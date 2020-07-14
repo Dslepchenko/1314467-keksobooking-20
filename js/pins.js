@@ -17,6 +17,16 @@
     pinElement.style = 'left: ' + data.location.x + 'px; top: ' + data.location.y + 'px;';
     pinIcon.src = data.author.avatar;
     pinIcon.alt = data.author.title;
+    pinElement.addEventListener('click', function () {
+      window.openPopup(data);
+    });
+
+    pinElement.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter') {
+        evt.preventDefault();
+        window.openPopup(data);
+      }
+    });
     return pinElement;
   }
 
@@ -33,6 +43,7 @@
   var successHandler = function (arrData) {
     advertArr = arrData;
     renderPins(advertArr);
+    // console.log(arrData);
   };
 
 
@@ -46,4 +57,4 @@
     successHandler: successHandler
   };
 
-}());
+})();

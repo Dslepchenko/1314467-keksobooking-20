@@ -77,6 +77,7 @@
     typeHousingSelectAdForm.addEventListener('change', onTypeHousingChanged);
     adFormAddressInput.value = getAddressCoordinate();
     window.backend.load(window.pins.successHandler, window.backend.errorHandler);
+    // window.card.createCard(offerItem);
   };
 
   mapPinMain.addEventListener('click', function () {
@@ -186,4 +187,4 @@
     setActiveState: setActiveState,
     setInActiveState: setInActiveState,
   };
-}());
+})();
