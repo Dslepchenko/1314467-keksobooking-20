@@ -45,6 +45,7 @@
     return card;
   };
 
+
   var renderCard = function (data) {
     map.innerHTML = '';
     map.appendChild(mapPins);
