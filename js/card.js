@@ -76,5 +76,5 @@
     renderCard(pinOffers);
 
     document.addEventListener('keydown', onPopupEscPress);
-  };
+  }; 
 })();
