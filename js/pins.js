@@ -43,14 +43,7 @@
   var successHandler = function (arrData) {
     advertArr = arrData;
     renderPins(advertArr);
-    // console.log(arrData);
   };
-
-
-  // window.backend.load(successHandler, window.backend.errorHandler);
-  // var generatePins = function () {
-  //   renderPins(advertArr);
-  // };
 
 
   window.pins = {
