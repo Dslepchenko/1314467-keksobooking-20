@@ -19,7 +19,6 @@
       minPrice: 10000
     }
   };
-
   // Функция для задания координат
   var getAddressCoordinate = function (coordinate) {
     var locationX = Math.floor(coordinate.offsetLeft + coordinate.offsetWidth / 2);
@@ -55,22 +54,28 @@
 
     switch (roomValue.value) {
       case '1':
-        guestsValue.value = roomValue.value;
+        guestsValue.options[0].disabled = true;
+        guestsValue.options[1].disabled = true;
+        guestsValue.options[3].disabled = true;
+        guestsValue.options[2].selected = true;
         break;
       case '2':
-        guestsValue.value = roomValue.value;
+        guestsValue.options[0].disabled = true;
+        guestsValue.options[3].disabled = true;
+        guestsValue.options[1].selected = true;
         break;
       case '3':
-        guestsValue.value = roomValue.value;
+        guestsValue.options[3].disabled = true;
+        guestsValue.options[0].selected = true;
         break;
       case '100':
-        guestsValue.value = roomValue.value;
+        guestsValue.options[0].disabled = true;
+        guestsValue.options[1].disabled = true;
+        guestsValue.options[2].disabled = true;
+        guestsValue.options[3].selected = true;
     }
     roomValue.addEventListener('change', function () {
       getGuestCapacity(roomValue, guestsValue);
-    });
-    guestsValue.addEventListener('change', function () {
-      getGuestCapacity(guestsValue, roomValue);
     });
   };
 
@@ -96,8 +101,6 @@
       window.form.getTimeInAndTimeOut(timeOut, timeIn);
     });
   };
-
-
   window.form = {
     getAddressCoordinate: getAddressCoordinate,
     getGuestCapacity: getGuestCapacity,

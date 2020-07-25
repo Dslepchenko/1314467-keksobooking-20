@@ -2,8 +2,8 @@
 (function () {
   var LOCATION_Y_MIN = 130;
   var LOCATION_Y_MAX = 630;
-  var PIN_MAIN_SIZE = 65;
-  var PIN_MAIN_HEIGHT_WITH_CORNER = 85;
+  var PIN_MAIN_SIZE = 66;
+  var PIN_MAIN_HEIGHT_WITH_CORNER = 86;
   var PIN_TIP_HEIGHT = 22;
   var VALUE_KEYS = {
     'Escape': 'Escape',
@@ -18,6 +18,5 @@
     PIN_MAIN_HEIGHT_WITH_CORNER: PIN_MAIN_HEIGHT_WITH_CORNER,
     PIN_TIP_HEIGHT: PIN_TIP_HEIGHT,
     VALUE_KEYS: VALUE_KEYS,
-
   };
 }());

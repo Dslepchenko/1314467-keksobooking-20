@@ -22,7 +22,7 @@
     });
 
     pinElement.addEventListener('keydown', function (evt) {
-      if (evt.key === 'Enter') {
+      if (evt.key === window.constant.VALUE_KEYS.Enter) {
         evt.preventDefault();
         window.openPopup(data);
       }

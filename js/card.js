@@ -50,7 +50,28 @@
     card.querySelector('.popup__avatar').src = cardOffers.author.avatar;
     return card;
   };
+  // if (cardOffers.offer.features.length > 0) {
+  //   featuresPopup.innerHTML = '';
+  //   for (var j = 0; j < cardOffers.offer.features.length; j++) {
+  //     var feature = document.createElement('li');
+  //     feature.classList.add('popup__feature', 'popup__feature--' + cardOffers.offer.features[j]);
+  //     featuresPopup.appendChild(feature);
+  //   }
+  // } else {
+  //   featuresPopup.classList.add('hidden');
+  // }
 
+  // if (cardOffers.offer.photos.length > 0) {
+  //   var photo = card.querySelector('.popup__photo');
+  //   photo.src = cardOffers.offer.photos[0];
+  //   for (var i = 1; i < cardOffers.offer.photos.length; i++) {
+  //     photo = photo.cloneNode(true);
+  //     photo.src = cardOffers.offer.photos[i];
+  //     popupPhoto.appendChild(photo);
+  //   }
+  // } else {
+  //   popupPhoto.classList.add('hidden');
+  // }
 
   var renderCard = function (data) {
     map.innerHTML = '';

@@ -1,76 +1,61 @@
 'use strict';
 
 (function () {
-
-  var startCoordsPin = {};
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapPins = document.querySelector('.map__pins');
+  var adForm = document.querySelector('.ad-form');
+  var adFormAddressInput = adForm.querySelector('#address');
 
 
+  // Функция, реализующая передвижение главной метки (mainPin) по карте
   mapPinMain.addEventListener('mousedown', function (evt) {
-    // Обработчики события передвижения мыши и отпускания кнопки мыши
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
     evt.preventDefault();
-
-    // Начальные координаты пина
-    startCoordsPin = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    // Обработчик событий на передвижение мыши
-    function onMouseMove(moveEvt) {
-      moveEvt.preventDefault();
-      moveMainPin(moveEvt);
-    }
-
-    // Обработчик событий на отпускание мыши
-    function onMouseUp(upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
-  });
-
-  // Функция перемещения пина
-  function moveMainPin(evt) {
-    var shift = {
-      x: startCoordsPin.x - evt.clientX,
-      y: startCoordsPin.y - evt.clientY,
-    };
-
-    startCoordsPin = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var currentX = mapPinMain.offsetLeft - shift.x;
-    var currentY = mapPinMain.offsetTop - shift.y;
-
-    // Проверка границ перемещения пина
     var minX = mapPinMain.clientWidth / -2;
     var maxX = mapPins.clientWidth - mapPinMain.clientWidth / 2;
     var minY = window.constant.LOCATION_Y_MIN - window.constant.PIN_MAIN_HEIGHT_WITH_CORNER;
     var maxY = window.constant.LOCATION_Y_MAX - window.constant.PIN_MAIN_HEIGHT_WITH_CORNER;
 
-    if (currentX < 0) {
-      currentX = minX;
-    } else if (currentX > maxX) {
-      currentX = maxX;
-    }
+    // Координаты точки начала движния
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
 
-    if (currentY < minY) {
-      currentY = minY;
-    } else if (currentY > maxY) {
-      currentY = maxY;
-    }
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
 
-    mapPinMain.style.left = currentX + 'px';
-    mapPinMain.style.top = currentY + 'px';
-    window.form.getAddressCoordinate(mapPinMain);
-  }
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
 
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      var getCoords = function (min, max, current) {
+        if (current > max) {
+          current = max;
+        } else if (current < min) {
+          current = min;
+        }
+        return current;
+      };
+      var clientsXCoord = getCoords(minX, maxX, (mapPinMain.offsetLeft - shift.x));
+      var clientsYCoord = getCoords(minY, maxY, (mapPinMain.offsetTop - shift.y));
+      mapPinMain.style.top = clientsYCoord + 'px';
+      mapPinMain.style.left = clientsXCoord + 'px';
+      adFormAddressInput.value = (clientsXCoord + window.constant.PIN_MAIN_SIZE / 2) + ', ' + (clientsYCoord + window.constant.PIN_MAIN_HEIGHT_WITH_CORNER);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 }());
